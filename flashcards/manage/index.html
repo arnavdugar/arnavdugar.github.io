@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<title>Manage</title>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/flashcards/manifest.json">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" defer>'use strict';class b extends HTMLElement{constructor(a){super();a=document.getElementById(a);this.attachShadow({mode:"open"}).appendChild(a.content.cloneNode(!0))}};class c extends b{constructor(){super("manage-template")}}customElements.define("manage-component",c);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/flashcards/service_worker.min.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed: ', error);
+    }
+  });
+}
+</script>
+
+
+<template id="manage-template"><style type="text/css"></style></template>
+
+<manage-component></manage-component>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<title>Flashcards</title>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/flashcards/manifest.json">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" defer>'use strict';class b extends HTMLElement{constructor(a){super();a=document.getElementById(a);this.attachShadow({mode:"open"}).appendChild(a.content.cloneNode(!0))}};class c extends b{constructor(){super("index-template")}}customElements.define("index-component",c);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/flashcards/service_worker.min.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed: ', error);
+    }
+  });
+}
+</script>
+<meta name="theme-color" content="#333745"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+<template id="index-template"><style type="text/css">@import url("https://fonts.googleapis.com/icon?family=Material+Icons");a{color:inherit;text-decoration:none}.index{display:flex;flex-direction:column;height:100%;width:100%}.header{display:flex;flex-direction:row;flex-grow:0;font-size:20px;font-weight:500;height:24px;margin-bottom:4px;padding:16px}.header>:first-child,.content{flex-grow:1}.action{align-items:center;border-radius:4px;display:flex;flex-direction:row;height:40px;margin:8px}.action:active{background:#e0493f}.action>*{padding:8px}.action>.icon{padding-right:24px}.footer{align-items:center;display:flex;flex-direction:column;flex-grow:0;font-size:10pt;padding:12px}.footer>*{font-weight:300;padding:4px}</style><div>
+  <div class="header">
+    <div>Flashcards</div>
+  </div>
+  <div class="content">
+    <a class="action" href="/flashcards/practice/">
+      <div class="icon material-icons">repeat</div>
+      <div class="text">Practice</div>
+    </a>
+    <a class="action" to="/flashcards/browse/">
+      <div class="icon material-icons">search</div>
+      <div class="text">Browse Decks</div>
+    </a>
+    <a class="action" to="/flashcards/manage/">
+      <div class="icon material-icons">style</div>
+      <div class="text">Manage Decks</div>
+    </a>
+    <a class="action" to="/flashcards/settings/">
+      <div class="icon material-icons">settings</div>
+      <div class="text">Settings</div>
+    </a>
+  </div>
+  <div class="footer">
+    <div>Version 1.0</div>
+  </div>
+</div>
+</template>
+
+<index-component></index-component>

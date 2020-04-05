@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<title>Practice</title>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/flashcards/manifest.json">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" defer>'use strict';class d extends HTMLElement{constructor(b){super();b=document.getElementById(b);this.attachShadow({mode:"open"}).appendChild(b.content.cloneNode(!0))}};let e=null;var g=async()=>{null==e&&(e=new Promise((b,f)=>{const c=indexedDB.open("flashcards",1);c.onsuccess=a=>{b(a.target.result)};c.onerror=f;c.onupgradeneeded=a=>{a=a.target.result;a.createObjectStore("deck",{keyPath:"id"}).createIndex("id","id",{unique:!0});a=a.createObjectStore("flashcard",{keyPath:"id"});a.createIndex("id","id",{unique:!0});a.createIndex("deck_id","deck_id",{unique:!1})}}))};class h extends d{constructor(){super("practice-template");g()}}customElements.define("practice-component",h);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/flashcards/service_worker.min.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed: ', error);
+    }
+  });
+}
+</script>
+<meta name="theme-color" content="#333745"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<template id="practice-template"><style type="text/css">@import url("https://fonts.googleapis.com/icon?family=Material+Icons");a{color:inherit;text-decoration:none}.index{display:flex;flex-direction:column;height:100%;width:100%}.header{flex-grow:0;font-size:20px;font-weight:500;height:24px;margin-bottom:4px;padding:16px}.section{padding:16px}.content{flex-grow:1}.action{align-items:center;border-radius:4px;display:flex;flex-direction:row;height:40px;margin:8px}.action:active{background:#e0493f}.action>*{padding:8px}.action>.icon{padding-right:24px}.footer{align-items:center;display:flex;flex-direction:column;flex-grow:0;font-size:10pt;padding:12px}.footer>*{font-weight:300;padding:4px}</style><div>
+  <div class="header">
+    <div>Practice</div>
+  </div>
+  <div class="content">
+    <div class="section">Hard Coded Decks</div>
+    <a class="action" href="/flashcards/card/?data=/flashcards/devanagari.min.json">
+      <div class="icon material-icons">style</div>
+      <div class="text">Devanagari</div>
+    </a>
+    <a class="action" href="/flashcards/card/?data=/flashcards/hiragana.min.json">
+      <div class="icon material-icons">style</div>
+      <div class="text">Hiragana</div>
+    </a>
+    <a class="action" href="/flashcards/card/?data=/flashcards/katakana.min.json">
+      <div class="icon material-icons">style</div>
+      <div class="text">Katakana</div>
+    </a>
+    <a class="action" href="/flashcards/card/?data=/flashcards/greetings.min.json">
+      <div class="icon material-icons">style</div>
+      <div class="text">Greetings</div>
+    </a>
+    <a class="action" href="/flashcards/card/?data=/flashcards/lesson1.min.json">
+      <div class="icon material-icons">style</div>
+      <div class="text">Japanese Lesson 1</div>
+    </a>
+    <div class="section">Default Decks</div>
+    <div class="section">Custom Decks</div>
+  </div>
+</div>
+</template>
+
+<practice-component></practice-component>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<title>Card</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/flashcards/manifest.json">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" defer>'use strict';class f extends HTMLElement{constructor(a){super();a=document.getElementById(a);this.attachShadow({mode:"open"}).appendChild(a.content.cloneNode(!0))}};function g(a,b,d){a.a=new SpeechSynthesisUtterance(b);a.a.onend=()=>{a.b=!1;a.f.innerText="volume_up"};a.c=d}
+class h extends f{constructor(){super("speech-icon-template");this.f=this.shadowRoot.getElementById("speak-button");this.b=!1;this.addEventListener("click",this.g)}async g(a){a.stopPropagation();this.b?speechSynthesis.cancel():(null!=this.c&&(this.a.lang=this.c),a=await speechSynthesis.getVoices(),this.a.voice=a.filter(b=>b.name.startsWith("Google")&&b.lang==this.c)[0],this.b=!0,this.f.innerText="stop",speechSynthesis.speak(this.a))}}customElements.define("speech-icon-component",h);class k extends f{constructor(){super("card-template");this.shadowRoot.addEventListener("slotchange",a=>{a=a.target;switch(a.name){case "hint":this.f.setAttribute("visible",0<a.assignedElements().length)}});this.c=this.shadowRoot.querySelector(".card");this.g=this.shadowRoot.getElementById("speak-button");this.f=this.shadowRoot.getElementById("hint-button");this.b=this.a=!1;this.addEventListener("click",this.h);this.f.addEventListener("click",a=>{a.stopPropagation();this.b=!this.b;this.c.setAttribute("hint",
+this.b)})}h(){this.a=!this.a;this.c.setAttribute("flipped",this.a)}}customElements.define("card-component",k);class l{constructor(a){this.c=a;this.b=-1;this.a=0;this.f=Array(a)}size(){return this.a}};function m(a,b){if(1<a.b){a.b+=1;b=a.c;a=a.b;if(0>a||a>=b.a)throw RangeError();a=b.b-a;0>a&&(a+=b.c);return b.f[a]}b=Math.floor(Math.random()*b.cards.length);a=a.c;var d=b;a.b=(a.b+1)%a.c;a.f[a.b]=d;a.a<a.c&&(a.a+=1);return b}
+function n(a,b){b=a.cards[b];const d=document.createElement("card-component");g(d.g,b.front,a.lang);var c=document.createElement("span");c.setAttribute("slot","front");c.setAttribute("size",a.size);c.className="card-text";c.textContent=b.front;d.append(c);c=document.createElement("span");c.setAttribute("slot","back");c.setAttribute("size",a.size);c.className="card-text";c.textContent=b.back;d.append(c);b.hint&&(a=document.createElement("span"),a.setAttribute("slot","hint"),a.textContent=b.hint,d.append(a));
+return d}
+class p extends f{constructor(){super("card-scroll-template");this.a=this.shadowRoot.querySelector(".scroll");this.a.addEventListener("scroll",this.f.bind(this));this.c=new l(10);this.b=1;this.data=(async()=>{const a=(new URLSearchParams(window.location.search)).get("data");return a?await (await fetch(a)).json():[]})();this.data.then(a=>{if(0!=a.cards.length)for(var b=0;2>b;b++){var d=m(this,a);d=n(a,d);this.a.append(d)}})}async f(){var a=this.a.scrollLeft,b=null;let d=null;var c=this.a.children;for(let e=
+0;e<c.length;e+=1)a>=c[e].offsetLeft&&(b=e,d=c[e]);if(null!=b){if(2<=b)this.a.removeChild(this.a.children[0]),this.a.scrollTo(d.offsetLeft,0);else if(0==b)for(a=2;a<c.length;a+=1)this.a.removeChild(c[a]);1>=this.a.children.length-b&&(b=await this.data,c=m(this,b),b=n(b,c),this.a.append(b))}}}customElements.define("card-scroll-component",p);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/flashcards/service_worker.min.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed: ', error);
+    }
+  });
+}
+</script>
+<meta name="theme-color" content="#000000"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<template id="card-template"><style type="text/css">.card{height:calc(100vmin - 32px);margin:16px;perspective:1024px;width:calc(100vmin - 32px)}.card[flipped=true]>.card-container{transform:rotateY(-180deg)}.card-container{bottom:0;left:0;position:absolute;right:0;top:0;transform-style:preserve-3d;transition:transform .8s}.card-container>*{align-items:center;border-radius:8px;display:flex;flex-direction:column;height:100%;justify-content:center;justify-items:center;position:absolute;width:100%}.card-container *{backface-visibility:hidden}.front{background:#77c4d3;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr}.front>.icons{display:flex;position:absolute;right:8px;top:8px}.front>.icons>*{border-radius:20px;padding:8px;transition:background-color .5s ease}.front>.icons>*:active{background-color:rgba(255,255,255,0.25)}.hint-button[visible=false]{display:none!important}.front>.content{grid-column-start:1;grid-column-end:2;grid-row-start:2;grid-row-end:3}.hint{align-self:start;font-size:14pt;grid-column-start:1;grid-column-end:2;grid-row-start:3;grid-row-end:4;visibility:hidden}.card[hint=true] .hint{visibility:visible}.back{background:#ea2e49;transform:rotateY(180deg)}.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased}</style><div class="card">
+  <div class="card-container">
+    <div class="front">
+      <div class="icons">
+        <speech-icon-component id="speak-button"></speech-icon-component>
+        <div id="hint-button" visible="false" class="material-icons hint-button">help</div>
+      </div>
+      <div class="content">
+        <slot name="front">
+      </div>
+      <div class="hint">
+        <slot name="hint">
+      </div>
+    </div>
+    <div class="back">
+      <slot name="back">
+    </div>
+  </div>
+</div>
+</template>
+<template id="card-scroll-template"><style type="text/css">.scroll{display:flex;flex-direction:row;height:100%;overflow-x:scroll;scroll-snap-type:x mandatory}.scroll::-webkit-scrollbar{width:0}.scroll>*{display:flex;flex-direction:row;align-items:center;scroll-snap-align:center}.card-text{text-align:center;white-space:pre-line}@media (orientation:landscape){.card-text[size="big"]{font-size:25vh}.card-text[size="regular"]{font-size:6vh}}@media (orientation:portrait){.card-text[size="big"]{font-size:25vw}.card-text[size="regular"]{font-size:6vw}}</style><div class="scroll"></div>
+</template>
+<template id="speech-icon-template"><style type="text/css">.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased}</style><div id="speak-button" class="icon material-icons">volume_up</div></template>
+
+<card-scroll-component></card-scroll-component>

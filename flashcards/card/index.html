@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<title>Card</title>
+<meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="/flashcards/manifest.json">
+<link rel="stylesheet" type="text/css" href="style.css">
+<script type="text/javascript" defer>'use strict';class e extends HTMLElement{constructor(a){super();a=document.getElementById(a);this.attachShadow({mode:"open"}).appendChild(a.content.cloneNode(!0))}};function f(a,b,d){a.a=new SpeechSynthesisUtterance(b);a.a.onend=()=>{a.b=!1;a.f.innerText="volume_up"};a.c=d}
+class g extends e{constructor(){super("speech-icon-template");this.f=this.shadowRoot.getElementById("speak-button");this.b=!1;this.addEventListener("click",this.g)}async g(a){a.stopPropagation();this.b?speechSynthesis.cancel():(null!=this.c&&(this.a.lang=this.c),a=await speechSynthesis.getVoices(),this.a.voice=a.filter(b=>b.name.startsWith("Google")&&b.lang==this.c)[0],this.b=!0,this.f.innerText="stop",speechSynthesis.speak(this.a))}}customElements.define("speech-icon-component",g);class h extends e{constructor(){super("card-template");this.shadowRoot.addEventListener("slotchange",a=>{a=a.target;switch(a.name){case "hint":this.f.setAttribute("visible",0<a.assignedElements().length)}});this.c=this.shadowRoot.querySelector(".card");this.g=this.shadowRoot.getElementById("speak-button");this.f=this.shadowRoot.getElementById("hint-button");this.b=this.a=!1;this.addEventListener("click",this.h);this.f.addEventListener("click",a=>{a.stopPropagation();this.b=!this.b;this.c.setAttribute("hint",
+this.b)})}h(){this.a=!this.a;this.c.setAttribute("flipped",this.a)}}customElements.define("card-component",h);function m(a,b){if(0>b||b>=a.a)throw RangeError();b=a.b-b;0>b&&(b+=a.c);return a.f[b]}class n{constructor(a){this.c=a;this.b=-1;this.a=0;this.f=Array(a)}size(){return this.a}};function p(a,b){b=Math.floor(Math.random()*b.cards.length);a=a.i;a.b=(a.b+1)%a.c;a.f[a.b]=b;a.a<a.c&&(a.a+=1);return b}
+function q(a,b){b=a.cards[b];const d=document.createElement("card-component");f(d.g,b.front,a.lang);var c=document.createElement("span");c.setAttribute("slot","front");c.setAttribute("size",a.size);c.className="card-text";c.textContent=b.front;d.append(c);c=document.createElement("span");c.setAttribute("slot","back");c.setAttribute("size",a.size);c.className="card-text";c.textContent=b.back;d.append(c);b.hint&&(a=document.createElement("span"),a.setAttribute("slot","hint"),a.textContent=b.hint,d.append(a));
+return d}
+class r extends e{constructor(){super("card-scroll-template");this.a=this.shadowRoot.querySelector(".scroll");this.shadowRoot.querySelector(".return-to-top").addEventListener("click",this.j.bind(this));this.i=new n(10);this.f=1;this.g=new IntersectionObserver(this.l.bind(this),{root:this.a,rootMargin:"0px",threshold:1});this.b=this.h=this.c=null;this.data=(async()=>{const a=(new URLSearchParams(window.location.search)).get("data");return a?await (await fetch(a)).json():[]})();this.data.then(a=>{if(0!=
+a.cards.length){var b=p(this,a);this.h=q(a,b);this.a.append(this.h);b=p(this,a);this.b=q(a,b);this.a.append(this.b);this.a.scrollTo(0,0);this.g.observe(this.b)}})}async l(a){const b=await this.data;for(const c of a){if(!c.isIntersecting)break;null!=this.c&&this.g.unobserve(this.c);null!=this.b&&this.g.unobserve(this.b);if(c.target==this.c){a=b;null!=this.b&&this.a.removeChild(this.b);this.b=this.h;this.h=this.c;this.f+=1;this.a.setAttribute("history","true");if(this.f+1>=this.i.size())this.c=null,
+this.a.scrollTo(0,0);else{var d=m(this.i,this.f+1);this.c=q(a,d);this.a.prepend(this.c);this.a.scrollTo(this.a.clientWidth,0);this.g.observe(this.c)}null!=this.b&&this.g.observe(this.b)}else c.target==this.b&&(a=b,null!=this.c&&this.a.removeChild(this.c),this.c=this.h,this.h=this.b,1<this.f?--this.f:p(this,a),2>this.f&&this.a.setAttribute("history","false"),d=m(this.i,this.f-1),this.b=q(a,d),this.a.append(this.b),this.a.scrollTo(this.a.clientWidth,0),this.g.observe(this.b),null!=this.c&&this.g.observe(this.c))}}async j(){if(2==
+this.f)this.a.scrollTo({top:0,left:2*this.a.clientWidth,behavior:"smooth"});else{var a=await this.data;null!=this.b&&(this.a.removeChild(this.b),this.g.unobserve(this.b));var b=m(this.i,1),d=q(a,b);this.a.append(d);this.a.scrollTo({top:0,left:2*this.a.clientWidth,behavior:"smooth"});await new Promise(c=>{const l=new IntersectionObserver(t=>{for(const k of t){if(!k.isIntersecting)break;if(k.target!=d)break;l.disconnect();c();break}},{root:this.a,rootMargin:"0px",threshold:1});l.observe(d)});this.a.removeChild(this.h);
+null!=this.c&&(this.g.unobserve(this.c),this.a.removeChild(this.c));this.f=1;this.a.setAttribute("history","false");this.h=d;2>=this.i.size()?(this.c=null,this.a.scrollTo(0,0)):(b=m(this.i,this.f+1),this.c=q(a,b),this.a.prepend(this.c),this.a.scrollTo(this.a.clientWidth,0),this.g.observe(this.c));b=m(this.i,0);this.b=q(a,b);this.a.append(this.b);this.g.observe(this.b)}}}customElements.define("card-scroll-component",r);
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      const registration = await navigator.serviceWorker.register('/flashcards/service_worker.min.js');
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    } catch (error) {
+      console.error('ServiceWorker registration failed: ', error);
+    }
+  });
+}
+</script>
+<meta name="theme-color" content="#000000"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<template id="card-template"><style type="text/css">.card{height:calc(100vmin - 32px);margin:16px;perspective:1024px;width:calc(100vmin - 32px)}.card[flipped=true]>.card-container{transform:rotateY(-180deg)}.card-container{bottom:0;left:0;position:absolute;right:0;top:0;transform-style:preserve-3d;transition:transform .8s}.card-container>*{align-items:center;border-radius:8px;display:flex;flex-direction:column;height:100%;justify-content:center;justify-items:center;position:absolute;width:100%}.card-container *{backface-visibility:hidden}.front{background:#77c4d3;display:grid;grid-template-columns:1fr;grid-template-rows:1fr 1fr 1fr}.front>.icons{display:flex;position:absolute;right:8px;top:8px}.front>.icons>*{border-radius:20px;padding:8px;transition:background-color .5s ease}.front>.icons>*:active{background-color:rgba(255,255,255,0.25)}.hint-button[visible=false]{display:none!important}.front>.content{grid-column-start:1;grid-column-end:2;grid-row-start:2;grid-row-end:3}.hint{align-self:start;font-size:14pt;grid-column-start:1;grid-column-end:2;grid-row-start:3;grid-row-end:4;visibility:hidden}.card[hint=true] .hint{visibility:visible}.back{background:#ea2e49;transform:rotateY(180deg)}.material-icons{font-family:'Material Icons';font-feature-settings:'liga';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:block;white-space:nowrap;word-wrap:normal;direction:ltr}</style><div class="card">
+  <div class="card-container">
+    <div class="front">
+      <div class="icons">
+        <speech-icon-component id="speak-button"></speech-icon-component>
+        <div id="hint-button" visible="false" class="material-icons hint-button">help</div>
+      </div>
+      <div class="content">
+        <slot name="front">
+      </div>
+      <div class="hint">
+        <slot name="hint">
+      </div>
+    </div>
+    <div class="back">
+      <slot name="back">
+    </div>
+  </div>
+</div>
+</template>
+<template id="card-scroll-template"><style type="text/css">.scroll{display:flex;flex-direction:row;height:100%;overflow-x:scroll;scroll-snap-type:x mandatory}.scroll::-webkit-scrollbar{width:0}.scroll>*{display:flex;flex-direction:row;align-items:center;scroll-snap-align:center}.card-text{text-align:center;white-space:pre-line}@media (orientation:landscape){.card-text[size="big"]{font-size:25vh}.card-text[size="regular"]{font-size:6vh}}@media (orientation:portrait){.card-text[size="big"]{font-size:25vw}.card-text[size="regular"]{font-size:6vw}}.scroll[history="true"]>.return-to-top{display:flex}.return-to-top{align-items:center;display:none;margin:8px;padding:8px;position:absolute;right:0;top:0}.return-to-top>.text{font-size:12px;padding-right:4px}.material-icons{font-family:'Material Icons';font-feature-settings:'liga';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:block;white-space:nowrap;word-wrap:normal;direction:ltr}</style><div class="scroll" history="false">
+  <div class="return-to-top">
+    <span class="text">Return to top</span>
+    <span class="icon material-icons">last_page</span>
+  </div>
+</div>
+</template>
+<template id="speech-icon-template"><style type="text/css">.material-icons{font-family:'Material Icons';font-feature-settings:'liga';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:block;white-space:nowrap;word-wrap:normal;direction:ltr}</style><div id="speak-button" class="icon material-icons">volume_up</div></template>
+
+<card-scroll-component></card-scroll-component>
